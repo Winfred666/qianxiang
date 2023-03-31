@@ -157,15 +157,15 @@ public class Player : MonoBehaviour
 
     void physicsCheck(){
         //脚底判断
-        RaycastHit2D leftCheck = Raycast(new Vector2(-footOffset,0f),Vector2.down,groundDistance,groundLayer);
-        RaycastHit2D rightCheck = Raycast(new Vector2(footOffset,0f),Vector2.down,groundDistance,groundLayer);
+        RaycastHit2D leftCheck = Raycast(new Vector2(-footOffset,0f), Vector2.down, groundDistance, groundLayer);
+        RaycastHit2D rightCheck = Raycast(new Vector2(footOffset,0f), Vector2.down, groundDistance, groundLayer);
         
         if(leftCheck || rightCheck)
             isOnGround = true;
         else isOnGround = false;
 
         //头顶判断
-        RaycastHit2D headCheck = Raycast(new Vector2(0f,colli.size.y),Vector2.up,headDistance,groundLayer);
+        RaycastHit2D headCheck = Raycast(new Vector2(0f,colli.size.y), Vector2.up, headDistance, groundLayer);
         
         if(headCheck)
             isHeadBlock = true;
@@ -216,8 +216,9 @@ public class Player : MonoBehaviour
 
         RaycastHit2D hit = Physics2D.Raycast(pos + offset,rayDirection,length,layer);
 
-        Color color = hit?Color.red :Color.green;
-        Debug.DrawRay(pos+offset,rayDirection*length,color);
+        Color color = hit ? Color.red : Color.green;
+
+        Debug.DrawRay(pos + offset, rayDirection * length, color);
 
         return hit;
     }
