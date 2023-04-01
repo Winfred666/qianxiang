@@ -38,6 +38,9 @@ public class GameManager : MonoBehaviour
     }
     public static void registerOrb(Orb orb){
         //是否重复添加
+        if(instance == null){
+            return;
+        }
         if(!instance.orbs.Contains(orb))
             instance.orbs.Add(orb);
         UIManager.upDateOrbs(instance.orbs.Count);
@@ -61,7 +64,7 @@ public class GameManager : MonoBehaviour
         instance.deathNumber++;
         instance.fader.fadeOut();
         //相当于setTimeOut计时器
-        instance.Invoke("restartScene",1.0f);
+        instance.Invoke("restartScene",2.0f);
         UIManager.upDateDeath(instance.deathNumber);
     }
 

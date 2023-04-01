@@ -31,18 +31,9 @@ public class PlayerAnimation : MonoBehaviour
     void Update()
     {
         ani.SetFloat(xSpeedID,Mathf.Abs(movement.xSpeed/Player.NORMALSPEED*2));
-        ani.SetBool(isOnGroundID,movement.isOnGround);
-        ani.SetBool(isHangingID,movement.isHanging);
-        ani.SetBool(isCrouchID,movement.isCrouch);
-        ani.SetFloat(ySpeedID,movement.ySpeed);
-    }
-
-    //声音函数
-    public void stepAudio(){
-        AudioManager.playerFootstepAudio();
-    }
-    
-    public void crouchAudio(){
-        AudioManager.playerCrouchAudio();
+        ani.SetBool(isOnGroundID, movement.isOnGround);
+        ani.SetBool(isHangingID, movement.isHanging);
+        ani.SetBool(isCrouchID, movement.isCrouch);
+        ani.SetFloat(ySpeedID, movement.ySpeed);
     }
 }

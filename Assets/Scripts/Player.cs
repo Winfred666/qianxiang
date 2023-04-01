@@ -6,45 +6,49 @@ public class Player : MonoBehaviour
 {
     private Rigidbody2D rb;
     private BoxCollider2D colli;
-    [Header("移动类型常量")]
-    public const float NORMALSPEED =8f;
-    public const float CROUCHSPEED=2f;
+    [Header("移动参数")]
+    public const float NORMALSPEED = 8f;
+    public const float CROUCHSPEED = 3f;
 
-    public const float JUMPFORCE = 6.3f;
-    public const float JUMPHOLDFORCE = 2.0f;
-    public const float JUMPHOLDDURATION = 0.1f;
-    public const float CROUCHJUMP = 2.5f;
-    
+    [Header("跳跃参数")]
+    public float JUMPFORCE = 6.3f;
+    public float JUMPHOLDFORCE = 2.0f;
+    public float JUMPHOLDDURATION = 0.1f;
+    public float CROUCHJUMP = 10.0f;
+    public float hangingJumpForce = 15f;
+
+
+    float jumpTime = 10f;
 
     [Header("状态参数")]
-    float xDirection = 1;
-    float xInitialSpeed = NORMALSPEED;
-
-    //为动画参数而暴露给子对象的类(不是子类)
-    public float xSpeed = 0;
-    public float ySpeed = 0;
-
     public bool isCrouch = false;
     public bool isOnGround = true;
     public bool isJump = false;
     public bool isHeadBlock = false;
     public bool isHanging = false;
-    private float jumpTime = 10f;
+
+    float xVelocity;
+
+    //为动画参数而暴露给子对象的参数
+    public float xSpeed = 0;
+    public float ySpeed = 0;
 
     //按键检测
-    private bool jumpHeld = false;
-    private bool crouchHeld = false;
-
+    bool jumpHeld = false;
+    bool jumpPress = false;
+    bool crouchHeld = false;
+    bool crouchPress = false;
 
     [Header("环境检测")]
     public LayerMask groundLayer;
-    public float footOffset; //双脚间距
-    public float headDistance; //头顶间距
-    public float groundDistance;//距离地面的距离
-    private float playerHeight;
+    public float footOffset = 0.4f; //双脚间距
+    public float headDistance = 0.5f; //头顶间距
+    public float groundDistance = 0.2f;//距离地面的距离
     public float eyeHeight = 1.5f;//底部到眼睛的距离
-    public float grabDistance = 0.3f;
+    public float grabDistance = 0.4f;
     public float reachOffset = 0.7f;
+
+    float playerHeight;
     //接收碰撞体尺寸常量
     Vector2 colliderStandSize;
     Vector2 colliderStandOffset;
@@ -74,29 +78,25 @@ public class Player : MonoBehaviour
         if(GameManager.isGameOver())
             return;
         jumpHeld = Input.GetButton("Jump");//是否保持按下
+        if(Input.GetButtonDown("Jump")) jumpPress = true;//是否按下
         crouchHeld = Input.GetButton("Crouch");
+        if (Input.GetButtonDown("Crouch")) crouchPress = true;
     }
 
     //更稳定的间隔时间
     private void FixedUpdate(){
         if(GameManager.isGameOver())
             return;
-        movePlayer();
         physicsCheck();
+        movePlayer();
+        jumpMovement();
+        jumpPress = false;
+        crouchPress = false;
     }
 
     void movePlayer(){
         //专门处理悬挂
         if(isHanging){
-            if(jumpHeld){
-                isHanging = false;
-                rb.bodyType = RigidbodyType2D.Dynamic;
-                rb.AddForce(new Vector2(0,JUMPFORCE*2.4f),ForceMode2D.Impulse);
-            }else if(crouchHeld){
-                isHanging = false;//由于紧贴，所以下降时加力就不满足悬挂条件，不会构成逐帧牵制
-                rb.bodyType = RigidbodyType2D.Dynamic;
-
-            }
             return;
         }
 
@@ -107,33 +107,34 @@ public class Player : MonoBehaviour
             standUp();
         else if(!isOnGround && isCrouch)//跳跃时起立
             standUp();
-        jumpMovement();
         //按下a为-1,d为1,不按为0;
-        xDirection=Input.GetAxis("Horizontal");
+        xVelocity = Input.GetAxis("Horizontal");
+        
+        rb.velocity = new Vector2(xVelocity * NORMALSPEED, rb.velocity.y);
+        
         flip();
-        rb.velocity = new Vector2(xDirection * xInitialSpeed , rb.velocity.y);
         
         ySpeed = rb.velocity.y;
         xSpeed = rb.velocity.x;
 
-        /*如果音频未添加进动画中，则需要手动控制0.5秒播放一次脚步声
-        if(isOnGround && xSpeed!=0){
-            float time=Time.time;
-            if(isCrouch && time-lastStepTime>CROUCHINTERVAL){
-                AudioManager.playerCrouchAudio();
-                lastStepTime=time;
-            }
-            else if(time-lastStepTime>STEPINTERVAL){
-                AudioManager.playerFootstepAudio();
-                lastStepTime=time;
-            }
-        }
-        */
-
     }
 
     void jumpMovement(){
-        if(jumpHeld && isOnGround && !isJump && !isHeadBlock){
+        if (isHanging)
+        {
+            if (jumpPress)
+            {
+                isHanging = false;
+                rb.bodyType = RigidbodyType2D.Dynamic;
+                rb.AddForce(new Vector2(rb.velocity.x, hangingJumpForce), ForceMode2D.Impulse);
+            }
+            if (crouchPress)
+            {
+                isHanging = false;//由于紧贴，所以下降时加力就不满足悬挂条件，不会构成逐帧牵制
+                rb.bodyType = RigidbodyType2D.Dynamic;
+            }
+        }
+        if (jumpPress && isOnGround && !isJump){
             if(isCrouch && isOnGround){
                 standUp();
                 rb.AddForce(new Vector2(0f,CROUCHJUMP),ForceMode2D.Impulse);
@@ -142,10 +143,11 @@ public class Player : MonoBehaviour
             isJump = true;
             rb.AddForce(new Vector2(0f,JUMPFORCE),ForceMode2D.Impulse);
 
-            jumpTime = Time.time+JUMPHOLDDURATION;
+            jumpTime = Time.time + JUMPHOLDDURATION;
             
             AudioManager.PlayerJumpAudio();
-        }else if(isJump){
+        }
+        else if(isJump){
             //长按跳跃，跳得更高
             if(jumpHeld)
                 rb.AddForce(new Vector2(0f,JUMPHOLDFORCE),ForceMode2D.Impulse);
@@ -182,9 +184,11 @@ public class Player : MonoBehaviour
         if(!isOnGround && rb.velocity.y<0f && !blockCheck && wallCheck && ledgeCheck){
             Vector3 pos = transform.position;
             //紧贴墙壁，y轴头顶与平台保持水平
-            pos.x+=wallCheck.distance*xDirection-0.05f;
-            pos.y-=ledgeCheck.distance;
+            pos.x += wallCheck.distance * xDirection;
+            pos.y -= ledgeCheck.distance;
+
             transform.position = pos;
+
             rb.bodyType = RigidbodyType2D.Static;
             isHanging = true;
         }
@@ -192,21 +196,18 @@ public class Player : MonoBehaviour
 
     void flip(){
         //二维对象有z坐标，应用vector3接收
-        if(xDirection <0)
+        if(xVelocity < 0)
             transform.localScale = new Vector3(-1,1,1);
-        else if(xDirection >0)
+        else if(xVelocity > 0)
             transform.localScale = new Vector3(1,1,1);
     }
-
     void crouch(){
         isCrouch = true;
-        xInitialSpeed=CROUCHSPEED;
         colli.size = colliderCrouchSize;
         colli.offset = colliderCrouchOffset;
     }
     void standUp(){
         isCrouch = false;
-        xInitialSpeed=NORMALSPEED;
         colli.size = colliderStandSize;
         colli.offset = colliderStandOffset;
     }
