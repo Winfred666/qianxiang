@@ -8,7 +8,7 @@ public class Player : MonoBehaviour
     private BoxCollider2D colli;
     [Header("移动参数")]
     public const float NORMALSPEED = 8f;
-    public const float CROUCHSPEED = 3f;
+    public const float CROUCHSPEED = 2f;
 
     [Header("跳跃参数")]
     public float JUMPFORCE = 6.3f;
@@ -110,7 +110,7 @@ public class Player : MonoBehaviour
         //按下a为-1,d为1,不按为0;
         xVelocity = Input.GetAxis("Horizontal");
         
-        rb.velocity = new Vector2(xVelocity * NORMALSPEED, rb.velocity.y);
+        rb.velocity = new Vector2(xVelocity * (isCrouch?CROUCHSPEED:NORMALSPEED), rb.velocity.y);
         
         flip();
         
@@ -137,6 +137,7 @@ public class Player : MonoBehaviour
         if (jumpPress && isOnGround && !isJump){
             if(isCrouch && isOnGround){
                 standUp();
+
                 rb.AddForce(new Vector2(0f,CROUCHJUMP),ForceMode2D.Impulse);
             }
             isOnGround = false;
