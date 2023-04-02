@@ -44,10 +44,11 @@ public class MonitorScan : MonoBehaviour
         transform.RotateAround(lensPosition,rotateDirection, scanAngularSpeed*Time.deltaTime);
     }
 
+    //检测已经在playerHealth中完成，只需要将预设加入trapss图层
+    // private void OnTriggerEnter2D(Collider2D colli){
+    //     if(colli.gameObject.layer == playerLayer){
+    //         GameManager.playerDied(transform);
+    //     }
+    // }
 
-    private void OnTriggerEnter2D(Collider2D colli){
-        if(colli.gameObject.layer == playerLayer){
-            GameManager.playerDied();
-        }
-    }
 }

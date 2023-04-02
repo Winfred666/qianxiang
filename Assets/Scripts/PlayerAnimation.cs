@@ -9,6 +9,7 @@ public class PlayerAnimation : MonoBehaviour
 
     int isOnGroundID;
     int isHangingID;
+    int isPhotoingID;
     int isCrouchID;
     int xSpeedID;
     int ySpeedID;
@@ -25,6 +26,7 @@ public class PlayerAnimation : MonoBehaviour
         isCrouchID = Animator.StringToHash("isCrouching");
         xSpeedID = Animator.StringToHash("speed");
         ySpeedID = Animator.StringToHash("verticalVelocity");
+        isPhotoingID = Animator.StringToHash("isPhotoing");
     }
 
     // Update is called once per frame
@@ -34,6 +36,10 @@ public class PlayerAnimation : MonoBehaviour
         ani.SetBool(isOnGroundID, movement.isOnGround);
         ani.SetBool(isHangingID, movement.isHanging);
         ani.SetBool(isCrouchID, movement.isCrouch);
+        ani.SetBool(isPhotoingID, movement.isPhotoing);
+        
         ani.SetFloat(ySpeedID, movement.ySpeed);
+        
+
     }
 }

@@ -20,8 +20,14 @@ public class Win_zone : MonoBehaviour
     {
         if (colli.gameObject.layer == playerLayer)
         {
-            //获胜
-            GameManager.playerWon();
+            //要先判断是否全部拍照任务完成
+            if(GameManager.isAllTasksComplete()){
+                //获胜
+                GameManager.playerWon();
+            }else{
+                //在页面中展示toast信息
+                GameManager.showToast("我不能走,必须拍照收集证据才能离开");
+            }
         }
     }
 }

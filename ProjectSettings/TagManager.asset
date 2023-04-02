@@ -3,7 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Transporter
   layers:
   - Default
   - TransparentFX
@@ -16,7 +17,7 @@ TagManager:
   - Trapss
   - Platform
   - GlobalPost
-  - 
+  - PhotoZone
   - 
   - 
   - 

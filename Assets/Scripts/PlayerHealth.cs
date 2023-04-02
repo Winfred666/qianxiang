@@ -25,10 +25,8 @@ public class PlayerHealth : MonoBehaviour
             AudioManager.playerDeathAudio();
 
             gameObject.SetActive(false);
-
-            //重新加载当前场景
-            // SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-            GameManager.playerDied();
+            
+            GameManager.playerDied(collision.gameObject.transform);
         }
     }
 }

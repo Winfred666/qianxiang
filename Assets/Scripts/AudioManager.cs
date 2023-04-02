@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
-    static AudioManager current;
+    public static AudioManager current;
 
     [Header("环境声音")]
     public AudioClip ambientClip;

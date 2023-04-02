@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4374595577422545677}
   - component: {fileID: 4374595577422545678}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: MonitorBoom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 4374595577602109455}
   - component: {fileID: 4374595577602109449}
   - component: {fileID: 4374595577602109448}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: MonitorRotatePoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -193,7 +193,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4374595577737081710}
   - component: {fileID: 4374595577737081711}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: RedZone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -207,14 +207,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4374595577737081709}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.21699998, y: -0.5530001, z: -0.045594547}
+  m_LocalRotation: {x: -0, y: -0, z: 0.16893417, w: 0.98562735}
+  m_LocalPosition: {x: -0.352, y: -0.609, z: -0.045594547}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4374595578619763746}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 19.452}
 --- !u!212 &4374595577737081711
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -253,15 +253,15 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 391666949
+  m_SortingLayer: 4
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: 533ce75972f454c4e9adaaa1868b6724, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 0283e544b54a2e5419b07bcce1800899, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1.45, y: 0.87}
+  m_Size: {x: 0.87, y: 0.75}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -279,7 +279,7 @@ GameObject:
   - component: {fileID: 4374595578619763745}
   - component: {fileID: 4374595578619763744}
   - component: {fileID: 4374595578619763751}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: RedZoneRotatePoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -379,17 +379,13 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: 0.13785844, y: 0.43244454}
-      - {x: -0.7319419, y: 0.351315}
-      - {x: -0.68299687, y: 0.1607306}
-      - {x: -0.61388373, y: -0.002741158}
-      - {x: -0.5426302, y: -0.106992245}
-      - {x: -0.39732817, y: -0.24433875}
-      - {x: -0.15037593, y: -0.38854986}
-      - {x: -0.031226069, y: -0.4147749}
-      - {x: 0.19519508, y: -0.43344522}
-      - {x: 0.48271224, y: -0.38147873}
-      - {x: 0.7319418, y: -0.22143452}
+    - - {x: 0.15513362, y: 0.44108206}
+      - {x: -0.6282903, y: 0.057635427}
+      - {x: -0.5114281, y: -0.12903756}
+      - {x: -0.39732814, y: -0.24433875}
+      - {x: -0.30646193, y: -0.31035775}
+      - {x: -0.15037592, y: -0.38854986}
+      - {x: -0.01395075, y: -0.4147749}
 --- !u!114 &4374595578619763751
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -416,7 +412,7 @@ GameObject:
   - component: {fileID: 4374595578626517780}
   - component: {fileID: 4374595578626517782}
   - component: {fileID: 4374595578626517781}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: monitorLen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -519,7 +515,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4374595579395218732}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: TopMonitor
   m_TagString: Untagged
   m_Icon: {fileID: 0}

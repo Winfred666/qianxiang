@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8494715962536932720}
   - component: {fileID: 8494715962536932721}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: wallCameraLen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25,12 +25,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8494715962536932751}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.006000027, y: -0.007999988, z: 0.031873267}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -0.011538484, y: -0.015384571, z: 0.061294742}
+  m_LocalScale: {x: 1.923077, y: 1.923077, z: 1.923077}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8494715963430415336}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &8494715962536932721
 SpriteRenderer:
@@ -94,7 +94,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8494715962597080813}
   - component: {fileID: 8494715962597080814}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: wallCameraBoom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -178,7 +178,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8494715962789159056}
   - component: {fileID: 8494715962789159057}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: RedZone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -193,12 +193,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8494715962789159087}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.25300002, y: -0.50500005, z: -0.045594547}
+  m_LocalPosition: {x: -0.629, y: -0.497, z: -0.045594547}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8494715963430415336}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &8494715962789159057
 SpriteRenderer:
@@ -238,15 +238,15 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 391666949
+  m_SortingLayer: 4
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: 533ce75972f454c4e9adaaa1868b6724, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 0283e544b54a2e5419b07bcce1800899, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1.45, y: 0.87}
+  m_Size: {x: 0.87, y: 0.75}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -261,7 +261,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8494715963026217950}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: WallMonitor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -277,8 +277,8 @@ Transform:
   m_GameObject: {fileID: 8494715963026217949}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.53864616, y: -0.4772371, z: -0.031873267}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 2.5, y: 2.5, z: 2.5}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 8494715963430415336}
   - {fileID: 8494715962597080813}
@@ -297,7 +297,7 @@ GameObject:
   - component: {fileID: 8494715963430415339}
   - component: {fileID: 8494715963430415338}
   - component: {fileID: 8494715963430415337}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: RedZoneRotatePoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -313,11 +313,11 @@ Transform:
   m_GameObject: {fileID: 8494715963430415335}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.142, y: -0.016, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.52, y: 0.52, z: 0.52}
+  m_ConstrainProportionsScale: 1
   m_Children:
-  - {fileID: 8494715962789159056}
   - {fileID: 8494715962536932720}
+  - {fileID: 8494715962789159056}
   m_Father: {fileID: 8494715963026217950}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -386,7 +386,7 @@ PolygonCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.26, y: -0.5}
+  m_Offset: {x: -0.35, y: -0.53}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -398,17 +398,13 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: 0.13785844, y: 0.43244454}
-      - {x: -0.7319419, y: 0.351315}
+    - - {x: 0.14679217, y: 0.40564343}
+      - {x: -0.7181443, y: 0.31756455}
       - {x: -0.68299687, y: 0.1607306}
       - {x: -0.61388373, y: -0.002741158}
       - {x: -0.5426302, y: -0.106992245}
-      - {x: -0.39732817, y: -0.24433875}
-      - {x: -0.15037593, y: -0.38854986}
-      - {x: -0.031226069, y: -0.4147749}
-      - {x: 0.19519508, y: -0.43344522}
-      - {x: 0.48271224, y: -0.38147873}
-      - {x: 0.7319418, y: -0.22143452}
+      - {x: -0.42757407, y: -0.23817402}
+      - {x: -0.2945908, y: -0.33367568}
 --- !u!114 &8494715963430415337
 MonoBehaviour:
   m_ObjectHideFlags: 0

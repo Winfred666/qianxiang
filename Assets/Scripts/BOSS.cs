@@ -13,10 +13,13 @@ public class BOSS : MonoBehaviour
     public LayerMask playerLayer;
     public bool isPlayer;
 
-    bool ischeck;
+    public bool ischeck = false;
 
     private Rigidbody2D rb;
     private BoxCollider2D colli;
+
+    private Animator ani;
+    private int ischeckID;
 
     float playerHeight;
     float nextchecktime;
@@ -41,6 +44,8 @@ public class BOSS : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         colli = GetComponent<BoxCollider2D>();
+        ani = GetComponent<Animator>();
+        ischeckID = Animator.StringToHash("ischeck");
 
         playerHeight = colli.size.y;
         isPlayer = false;
@@ -51,27 +56,23 @@ public class BOSS : MonoBehaviour
         ischeck = false;
         nextchecktime = Time.time + checkcycle;
         finishchecktime = nextchecktime + checkduration;
-        //flip();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     private void FixedUpdate()
     {
         if(Time.time > nextchecktime){
-            transform.localScale = new Vector3(-1, 1, 1);
             ischeck = true;
+            ani.SetBool(ischeckID,ischeck);
+
             nextchecktime = Time.time + checkcycle;
         }
         if(ischeck){
             findPlayer();
             if (Time.time > finishchecktime){
-                transform.localScale = new Vector3(1, 1, 1);
                 ischeck = false;
+                ani.SetBool(ischeckID,ischeck);
+                
                 finishchecktime = nextchecktime + checkduration;
             }
                 
@@ -89,20 +90,12 @@ public class BOSS : MonoBehaviour
 
             gameObject.SetActive(false);
 
-            //重新加载当前场景
-            // SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-            GameManager.playerDied();
+            GameManager.playerDied(transform);
         }
         else isPlayer = false;
     }
-    void flip()
-    {
-        //二维对象有z坐标，应用vector3接收
-        //if (xVelocity < 0)
-            transform.localScale = new Vector3(-1, 1, 1);
-        //else if (xVelocity > 0)
-            //transform.localScale = new Vector3(1, 1, 1);
-    }
+
+
     RaycastHit2D Raycast(Vector2 offset, Vector2 rayDirection, float length, LayerMask layer)
     {
         Vector2 pos = transform.position;//获取对象锚点，在图像底部中心位置，不是碰撞盒子
@@ -110,7 +103,7 @@ public class BOSS : MonoBehaviour
         RaycastHit2D hit = Physics2D.Raycast(pos + offset, rayDirection, length, layer);
 
         Color color = hit ? Color.red : Color.green;
-
+        
         Debug.DrawRay(pos + offset, rayDirection * length, color);
 
         return hit;

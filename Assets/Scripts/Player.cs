@@ -6,9 +6,13 @@ public class Player : MonoBehaviour
 {
     private Rigidbody2D rb;
     private BoxCollider2D colli;
-    [Header("移动参数")]
-    public const float NORMALSPEED = 8f;
+    public static Orb inWhichPhotoZone = null;
+
+    [Header("移动参数和常量")]
+    public const float NORMALSPEED = 6f;
     public const float CROUCHSPEED = 2f;
+    public const float CONVEYORSPEED = 5f;
+    public float PHOTOTIME = 0.5f;
 
     [Header("跳跃参数")]
     public float JUMPFORCE = 6.3f;
@@ -18,6 +22,7 @@ public class Player : MonoBehaviour
     public float hangingJumpForce = 15f;
 
 
+    float photoStartTime = 0f;
     float jumpTime = 10f;
 
     [Header("状态参数")]
@@ -26,8 +31,10 @@ public class Player : MonoBehaviour
     public bool isJump = false;
     public bool isHeadBlock = false;
     public bool isHanging = false;
+    public bool isPhotoing = false;
 
     float xVelocity;
+    float ConveyorAffectSpeed = 0f;
 
     //为动画参数而暴露给子对象的参数
     public float xSpeed = 0;
@@ -38,6 +45,8 @@ public class Player : MonoBehaviour
     bool jumpPress = false;
     bool crouchHeld = false;
     bool crouchPress = false;
+
+    bool photoPress = false;
 
     [Header("环境检测")]
     public LayerMask groundLayer;
@@ -60,9 +69,6 @@ public class Player : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         colli = GetComponent<BoxCollider2D>();
-        //如不赋值则自动选择有物理操作的碰撞层
-        //groundLayer = LayerMask.NameToLayer("Ground");
-
 
         playerHeight = colli.size.y;
 
@@ -81,6 +87,8 @@ public class Player : MonoBehaviour
         if(Input.GetButtonDown("Jump")) jumpPress = true;//是否按下
         crouchHeld = Input.GetButton("Crouch");
         if (Input.GetButtonDown("Crouch")) crouchPress = true;
+        
+        if (Input.GetButtonDown("Photo")) photoPress = true;
     }
 
     //更稳定的间隔时间
@@ -92,6 +100,8 @@ public class Player : MonoBehaviour
         jumpMovement();
         jumpPress = false;
         crouchPress = false;
+        photoPress = false;
+        inWhichPhotoZone = null;
     }
 
     void movePlayer(){
@@ -101,19 +111,34 @@ public class Player : MonoBehaviour
         }
 
         //处理输入
-        if(crouchHeld && !isCrouch && isOnGround)
-            crouch();
-        else if(!crouchHeld && isCrouch && !isHeadBlock)//未遮挡时松开s起立
-            standUp();
-        else if(!isOnGround && isCrouch)//跳跃时起立
-            standUp();
+        if(!isPhotoing){
+            if(crouchHeld && !isCrouch && isOnGround)
+                crouch();
+            else if(!crouchHeld && isCrouch && !isHeadBlock)//未遮挡时松开s起立
+                standUp();
+            else if(!isOnGround && isCrouch)//跳跃时起立
+                standUp();
         //按下a为-1,d为1,不按为0;
-        xVelocity = Input.GetAxis("Horizontal");
+            xVelocity = Input.GetAxis("Horizontal");
         
-        rb.velocity = new Vector2(xVelocity * (isCrouch?CROUCHSPEED:NORMALSPEED), rb.velocity.y);
+            rb.velocity = new Vector2(xVelocity * (isCrouch?CROUCHSPEED:NORMALSPEED) + ConveyorAffectSpeed, rb.velocity.y);
         
-        flip();
-        
+            flip();
+        }
+        else{
+            //进行拍照
+            if(Time.time > photoStartTime + PHOTOTIME){
+                isPhotoing = false;
+                checkPhotoQuality();
+            }
+        }
+
+        //站立不动时开始拍照
+        if(isOnGround && !isCrouch && Mathf.Abs(xVelocity)<0.05 && photoPress){
+            isPhotoing = true;
+            photoStartTime = Time.time;
+        }
+
         ySpeed = rb.velocity.y;
         xSpeed = rb.velocity.x;
 
@@ -148,14 +173,16 @@ public class Player : MonoBehaviour
             
             AudioManager.PlayerJumpAudio();
         }
+        
         else if(isJump){
-            //长按跳跃，跳得更高
+            //长按跳跃，跳得更高(deprecaded)
             if(jumpHeld)
-                rb.AddForce(new Vector2(0f,JUMPHOLDFORCE),ForceMode2D.Impulse);
+                //rb.AddForce(new Vector2(0f,JUMPHOLDFORCE),ForceMode2D.Impulse);
             //长按跳跃时间已过
             if(jumpTime<Time.time)
                 isJump = false;
         }
+        
     }
 
     void physicsCheck(){
@@ -166,6 +193,13 @@ public class Player : MonoBehaviour
         if(leftCheck || rightCheck)
             isOnGround = true;
         else isOnGround = false;
+
+        //传送带判断
+        if(leftCheck && leftCheck.transform.CompareTag("Transporter"))
+            DealConveyor(leftCheck.transform);
+        else if(rightCheck && rightCheck.transform.CompareTag("Transporter"))
+            DealConveyor(rightCheck.transform);
+        else DealConveyor(null);
 
         //头顶判断
         RaycastHit2D headCheck = Raycast(new Vector2(0f,colli.size.y), Vector2.up, headDistance, groundLayer);
@@ -212,7 +246,6 @@ public class Player : MonoBehaviour
         colli.size = colliderStandSize;
         colli.offset = colliderStandOffset;
     }
-
     RaycastHit2D Raycast(Vector2 offset,Vector2 rayDirection,float length,LayerMask layer){
         Vector2 pos = transform.position;//获取对象锚点，在图像底部中心位置，不是碰撞盒子
 
@@ -224,4 +257,27 @@ public class Player : MonoBehaviour
 
         return hit;
     }
+
+    
+
+    //处理脚踩传送带的情况，添加x方向速度
+    void DealConveyor(Transform Conveyor){
+        if(Conveyor == null)
+            ConveyorAffectSpeed = 0f;
+        else if(Conveyor.localScale.x>0)
+            ConveyorAffectSpeed = -CONVEYORSPEED;
+        else
+            ConveyorAffectSpeed = CONVEYORSPEED;
+    }
+
+    //检查照片质量，即查看player前方是否有拍照对象(是否在拍照区域内)，有则完成任务清单，没有则相片作废
+    void checkPhotoQuality(){
+        if(inWhichPhotoZone != null){
+            GameManager.removeOrb(inWhichPhotoZone);
+        }else{
+            GameManager.showToast("离得太远了,无法拍到有效照片");
+        }
+        
+    }
+
 }

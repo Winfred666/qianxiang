@@ -11,6 +11,8 @@ public class RedZone : MonoBehaviour
 
     private Vector3 rotateDirection = Vector3.forward;
 
+    public float CurrentAngle;
+
     public static RedZone redZone;
 
     private LayerMask playerLayer;
@@ -40,6 +42,8 @@ public class RedZone : MonoBehaviour
         else if(transform.localEulerAngles.z < 180f && transform.localEulerAngles.z > endAngle)
             rotateDirection = Vector3.back;
 
+        CurrentAngle = transform.localEulerAngles.z;
+        
         transform.RotateAround(lensPosition,rotateDirection, scanAngularSpeed*Time.deltaTime);
     }
 
