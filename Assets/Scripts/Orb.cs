@@ -5,9 +5,9 @@ using UnityEngine;
 public class Orb : MonoBehaviour
 {
     int playerLayer;
+    public bool FlipPhotoDirection;
     public GameObject thisorb;
-    public GameObject explosionVFXPrefab;
-
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -18,7 +18,9 @@ public class Orb : MonoBehaviour
     }
 
     private void OnTriggerStay2D(Collider2D collision){
-        if(collision.gameObject.layer == playerLayer){
+        //拍照朝向还得正确
+        if(PlayerHealth.GetIfPlayerFlip() == FlipPhotoDirection &&
+            collision.gameObject.layer == playerLayer){
             /*
             Instantiate(explosionVFXPrefab,transform.position,transform.rotation);
             AudioManager.orbAudio();

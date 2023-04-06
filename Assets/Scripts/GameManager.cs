@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     [Header("全局游戏参数")]
-    [SerializeField] private float TotalTime = 60f;
+    [SerializeField] private float TotalTime;
 
     public static GameManager instance;
     private SceneFader fader;
@@ -23,8 +23,10 @@ public class GameManager : MonoBehaviour
     private void Awake(){
         //游戏初始化
         if(instance != null){
+            //重置时间
             instance.gameTime = 0f;
             instance.gameOver = false;
+            UIManager.upDateDeath(instance.deathNumber);
             Destroy(gameObject);
             return;
         }
@@ -86,22 +88,20 @@ public class GameManager : MonoBehaviour
     //游戏周期函数
     public static void playerDied(Transform DieReason){
         instance.deathNumber++;
-
+        UIManager.upDateDeath(instance.deathNumber);
         instance.gameOver = true;
         
         //instance.fader.fadeOut();
         //相当于setTimeOut计时器
-        //instance.Invoke("restartScene",2.0f);
-        
         //切入到失败画面，提供选项。
-        UIManager.showFailureMenu(1);
-        UIManager.upDateDeath(instance.deathNumber);
+        instance.Invoke("ShowFail",1.0f);
+        
     }
 
-    void restartScene(){
+    private void ShowFail(){
         //清空列表
         instance.orbs.Clear();
-        ChangeScene.OnStartGame(SceneManager.GetActiveScene().buildIndex);
+        UIManager.showFailureMenu(1);
     }
 
     public static bool isAllTasksComplete(){
@@ -122,4 +122,9 @@ public class GameManager : MonoBehaviour
     public static void showToast(string toast){
         UIManager.ShowToast(toast);
     }
+
+    public static float getTimeProcessing(){
+        return instance.gameTime/instance.TotalTime;
+    }
+    
 }

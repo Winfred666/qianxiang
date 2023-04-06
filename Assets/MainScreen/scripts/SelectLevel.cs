@@ -13,8 +13,12 @@ public class SelectLevel : MonoBehaviour
         Option1Hold = Input.GetButton("Option1");
         Option2Hold = Input.GetButton("Option2");
         if(Option1Hold)
-            ChangeScene.OnStartGame("Cartoon1");
+            ChangeScene.OnStartGame("Scene1");
         else if(Option2Hold)
             ChangeScene.OnStartGame("Scene2");
+    }
+
+    void OnDestroy(){
+        GabageManager.Destroy_s("CartoonMusicPlayer");
     }
 }

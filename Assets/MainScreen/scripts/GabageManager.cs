@@ -8,12 +8,14 @@ public class GabageManager : MonoBehaviour
     void Start()
     {
         
-        Destroy_s(GameObject.Find("Audio Manager"));
-        Destroy_s(GameObject.Find("UI Manager"));
-        Destroy_s(GameObject.Find("GameManager"));   
+        Destroy_s("Audio Manager");
+        Destroy_s("UI Manager");
+        Destroy_s("GameManager");   
+        Destroy_s("CartoonMusicPlayer");
     }
 
-    void Destroy_s(Object thing){
+    public static void Destroy_s(string name){
+        GameObject thing = GameObject.Find(name);
         if(thing != null)
             Destroy(thing);
     }

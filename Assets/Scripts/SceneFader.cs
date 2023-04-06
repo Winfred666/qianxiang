@@ -19,9 +19,4 @@ public class SceneFader : MonoBehaviour
     public void fadeOut(){
         anim.SetTrigger(faderID);
     }
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

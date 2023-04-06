@@ -11,9 +11,11 @@ public class BOSS : MonoBehaviour
 {
     [Header("人物检测")]
     public LayerMask playerLayer;
-    public bool isPlayer;
+    private bool isPlayer;
 
-    public bool ischeck = false;
+    public float xDirection = 1;
+
+    private bool ischeck = false;
 
     private Rigidbody2D rb;
     private BoxCollider2D colli;
@@ -39,6 +41,11 @@ public class BOSS : MonoBehaviour
     public float eyeHeight;//底部到眼睛的距离
     public float lookDistance;
 
+    [Header("第二条低处射线")]
+    public float downFootOffset;
+    public float downDistance;
+    public float downHeight;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -61,6 +68,9 @@ public class BOSS : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if(isPlayer){
+            return;
+        }
         if(Time.time > nextchecktime){
             ischeck = true;
             ani.SetBool(ischeckID,ischeck);
@@ -80,15 +90,13 @@ public class BOSS : MonoBehaviour
         }
     }
     void findPlayer(){
-        float xDirection = transform.localScale.x;
         RaycastHit2D playerCheck = Raycast(new Vector2(footOffset * xDirection, eyeHeight), Vector2.right * xDirection, lookDistance, playerLayer);
-        if (playerCheck) { 
+        RaycastHit2D downCheck = Raycast(new Vector2(downFootOffset * xDirection, downHeight), Vector2.right * xDirection, downDistance, playerLayer);
+        if (playerCheck || downCheck) { 
             isPlayer = true;
-            Instantiate(deathVFX, transform.position, transform.rotation);
-
+            PlayerHealth.ShowDeathSmog();
+            
             AudioManager.playerDeathAudio();
-
-            gameObject.SetActive(false);
 
             GameManager.playerDied(transform);
         }

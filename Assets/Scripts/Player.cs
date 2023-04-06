@@ -14,6 +14,8 @@ public class Player : MonoBehaviour
     public const float CONVEYORSPEED = 5f;
     public float PHOTOTIME = 0.5f;
 
+    public GameObject RunningDustVFX;
+
     [Header("跳跃参数")]
     public float JUMPFORCE = 6.3f;
     public float JUMPHOLDFORCE = 2.0f;
@@ -58,11 +60,15 @@ public class Player : MonoBehaviour
     public float reachOffset = 0.7f;
 
     float playerHeight;
+
+    private List<GameObject> DustQueue = new List<GameObject>();
     //接收碰撞体尺寸常量
     Vector2 colliderStandSize;
     Vector2 colliderStandOffset;
     Vector2 colliderCrouchSize;
     Vector2 colliderCrouchOffset;
+
+    Vector3 footOffset3 = Vector3.zero;
 
     // Start is called before the first frame update
     void Start()
@@ -138,11 +144,25 @@ public class Player : MonoBehaviour
             isPhotoing = true;
             photoStartTime = Time.time;
         }
-
+        
+        //一点点跑步烟雾
+        
+        if(isOnGround && !isCrouch && xSpeed * rb.velocity.x < 0){
+            if(xSpeed > 0)
+                footOffset3.x = footOffset;
+            else
+                footOffset3.x = -footOffset;
+            //添加到尘土队列，定时销毁（先进先出）
+            GameObject oneDust = Instantiate(RunningDustVFX,transform.position+footOffset3,transform.rotation);
+            oneDust.transform.localScale = new Vector3( footOffset3.x>0?1f:-1f ,1f,1f);
+            DustQueue.Add(oneDust);
+            Invoke("DestroyOneDust",1f);
+        }
         ySpeed = rb.velocity.y;
         xSpeed = rb.velocity.x;
 
     }
+
 
     void jumpMovement(){
         if (isHanging)
@@ -275,9 +295,16 @@ public class Player : MonoBehaviour
         if(inWhichPhotoZone != null){
             GameManager.removeOrb(inWhichPhotoZone);
         }else{
-            GameManager.showToast("离得太远了,无法拍到有效照片");
+            GameManager.showToast("这不是证据,没有拍到有效照片");
         }
         
+    }
+
+    void DestroyOneDust(){
+        if(DustQueue[0] != null){
+            Destroy(DustQueue[0]);
+            DustQueue.RemoveAt(0);
+        }
     }
 
 }

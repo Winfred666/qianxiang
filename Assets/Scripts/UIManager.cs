@@ -24,6 +24,10 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Sprite DiscoverFailImg;
     [SerializeField] private Sprite WinImg;
 
+    [SerializeField] private GameObject TimeSprite;
+    private Animator TimeAni;
+    private int TimeProcessID;
+
     // Start is called before the first frame update
     private void Awake(){
         if(instance!= null){
@@ -33,6 +37,9 @@ public class UIManager : MonoBehaviour
         instance = this;
         instance.MaskImage = toastMask.GetComponent<Image>();
         instance.GameOverImage = instance.gameOver.GetComponent<Image>();
+        instance.TimeAni = instance.TimeSprite.GetComponent<Animator>();
+        instance.TimeProcessID = Animator.StringToHash("TimeProcess");
+
 
         DontDestroyOnLoad(gameObject);
         instance.toastText.text = "";
@@ -51,10 +58,15 @@ public class UIManager : MonoBehaviour
         int minutes = (int)time/60;
         int seconds = (int)time%60;
         instance.timeText.text=minutes.ToString("00")+":"+seconds.ToString("00");
+        //更新沙漏动画
+        instance.TimeAni.SetFloat(instance.TimeProcessID,GameManager.getTimeProcessing());
     }
 
 
     public static void ShowToast(string text){
+        //不设置等待队列，直接拒绝
+        if(instance.toastMask.activeSelf == true) return;
+
         //设置初始状态
         instance.ToastTextBuffer = text;
         instance.toastMask.SetActive(true);
